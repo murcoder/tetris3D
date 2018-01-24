@@ -1,6 +1,6 @@
 -------------------------------------------<br>
------------ <b> 3D Tetris Prototyp </b>------------<br>
----- Created for University of Vienna -----<br>
+----------- <b> 3D Tetris Prototyp </b>-----------<br>
+---- Created for University of Vienna ----<br>
 -------------------------------------------<br>
 <br>
 <br>
@@ -12,18 +12,18 @@ Controls<br>
 '<-' or '4'.........move in -X direction (left)<br>
 '->' or '6'.........move in X direction (right)<br>
 'Space'..........release the object<br>
-'W'.................stop/start the gravity<br>
+'W'.................stop/start the gravity<br><br>
 ------------Rotation-------------<br>
 'x'/'X'..............rotate counter-/clockwise around the X-axis<br>
 'y'/'Y'..............rotate counter-/clockwise around the Y-axis<br>
-'z'/'Z'..............rotate counter-/clockwise around the Z-axis<br>
+'z'/'Z'..............rotate counter-/clockwise around the Z-axis<br><br>
 ---------------View---------------<br>
 'Mouse'.........change cameraposition - left: translation / right: rotation<br>
 'P'.................switch between orthographic and perspective view<br>
 'G'.................toggle wireframe.<br>
 'R'.................hide the whole wireframe<br>
 'Q'.................restore the View/Lock the mouse<br>
-'S'.................zoom in/out<br>
+'S'.................zoom in/out<br><br>
 --------------Debug--------------<br>
 'I'...................print all informations about the current Object in the console(F12)<br>
 'U'.................print the globalGrid in the console(F12)<br>
