@@ -40,12 +40,12 @@ Als Lernunterlagen für WebGL habe ich vorwiegend folgende Quellen verwendet: -B
 SPIELFELD<br>
 globalGrid: Hierbei handelt es sich um die Matrix-repräsentation des Spielfelds im Hintergrund. Es wird verwendet um die Kollisionsabfrage zu handeln. Wird erstellt in grid.js/resetGrid().<br>
 drawGrid: Dies ist die gezeichnete, visuelle Variante des Grids. Wird erstellt in grid.js/createGrid() sowie createToggleGrid() und gezeichnet in tetris.js/drawScene()
-<br/>
+<br/><br>
 TETROMINOS<br>
 Die Form, Farbe und der Objektgrid jedes Tetromino wird übersichtlichkeitshalber in einer eigenen Javascript Datei definiert (O.js, S.js,usw.). 
 Zusätzlich wird in jeder Tetromino-Datei ein Objekt erstellt, mittels der Funktion tetrominoConstructor() (Tetris.js) und anschließend in das Array tetrominos[] gespeichert. Aufgerufen werden die Dateien einmalig in initBuffer() (Tetris.js). 
 Jedes Objekt hat seinen eigenen Namen, Farbwerte, blocks, sowie individuelle positionen im golbalGrid sowie im drawGrid. Gelandete Elemente werden im Array landedElems[] gespeichert und in drawScene() fortlaufend gezeichnet.
-<br>
+<br><br>
 <b>STEUERUNG</b><br>
 -----------------------<br>
 Die Steuerung wird in keyHandler.js, mittels event-handling realisiert.<br>
@@ -58,42 +58,42 @@ checkGrid() hingegen kontrolliert bei jeder Bewegung den globalGrid. Ist ein Obj
 <b>TETRIS.JS</b><br>
 -----------------------<br>
 Hier sind alle essentiellen Funktionen implementiert, die für das aktuelle lauffähige Tetris Programm notwendig sind.
-<br>
+<br><br>
 tetrominoConstructor(name, items,posSize,colSize, blocks, colors, vertexIndices, objectGrid0, objectGrid90, objectGrid180, objectGrid270, startPointGrid, endPointGrid, topleft): Erzeuge ein neues Tetromino Objekt.
-<br>
+<br><br>
 spawn(elem): Überwacht, ob ein Element gelandet ist oder nicht. Nicht Gelandet: Zeichne das aktuelle Objekt; Gelandet: Kopiere das aktuelle Element und speichere in landedElems[]
-<br>
+<br><br>
 gravity(): Bewege das Objekt in konstanter Geschwindigkeit in -Y Richtung. Speichere gleichzeitig die aktuelle Y-Position des Objekts.
 transformationAnimation(): Animiere Roationen und Bewegungen.
-<br>
+<br><br>
 webGLStart(): Initialisiert WebGL, den Vertex- und den Fragmentshader, sowie die Buffer fuer die Eckpunkte und Farbwerte, behandelt Tastatureingaben und wiederholt das Programm
-<br>
+<br><br>
 initGL(canvas): Initialisiere WebGL (Web Graphic Libary) und waehlt den Rendering Context WebGL fuer das Canvas Element aus.
 getShader(gl, id): Ruft den korrekten Shadertyp auf und liefert einen Grafikkarten kompatiblen Shader
-<br>
+<br><br>
 initShaders(): Fuegt den Vertexshader (zustaendig fuer Berechnung der Eckpunkte des 3DModels) und den Fragmentshader (zustaendig fuer die Oberflaeche des Modells), zu einem WebGL Programm Objekt (ausfuerbar direkt auf der GraKa) zusammen. Jedes Programm besteht aus jeweils einem Vertex- sowie Fragment- oder Pixelshader.
-<br>
+<br><br>
 setMatrixUniforms(): Wandle die Matrizen von Javascript auf WebGL (Grafikkarten-seitig) um, damit die Sichtbarkeit fuer die Shaders garantiert ist.
-<br>
+<br><br>
 degToRad(degrees): Umrechnung vom Radiant- zum Grad Winkelmaß
-<br>
+<br><br>
 mvPushMatrix(): Speichere die globale mvMatrix (ModelView-) auf einen Stack.
-<br>
+<br><br>
 mvPopMatrix(): Lade die letzte Matrix vom Stack.
-<br>
+<br><br>
 initBuffers(): Definiere die Objekte mithilfer ihrer Eckpunkte. Fuelle Grafikkarten Buffer mit informationen uber die gewuenschten Objekte.
-<br>
+<br><br>
 drawScene(): Zeichnet die Szene inklusive den Objekten und den drawGrid.
-<br>
+<br><br>
 animate(): Fuehrt eine Animation aus, wenn der Zielwinkel noch nicht erreicht wurde.
-<br>
+<br><br>
 tick(): Aktualisiert das Bild um eine Animation zu erschaffen.
-<br>
+<br><br>
 START.HTML
 Im Head werden alle Scripts aufgerufen, wobei sich der Code der beiden Shaderscripts (Vertex- und Fragmentshader) direkt in der HTML befindet. Außerdem ist hier natürlich der gesamte HTML Code zum Seitenaufbau enthalten und ruft beim Seitenaufruf sofort die Funktion webGLStart() (in Tetris.js) auf.
-<br>
+<br><br>
 WEBGL-UTILS.JS
 Liefert das entsprechende unabhängige Refresh-Plugin für den Browser, damit sich dieser Grafik-Änderungen sofort wahrnimmt und darstellt.
-<br>
+<br><br>
 GLMATRIX-0.9.5.MIN.JS
 Bibliothek die alle mathematischen Matrix operationen beinhaltet.
