@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	
+		<title>Tetris - 2</title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="css/foundation.css" />
+		<!--  Foundation  -->
+		<script src="js/vendor/modernizr.js"></script>
+		
+	</head>
+
+
+
+
+	<!--  Bei Seitenaufruf wird sofort die Funktion WebGL ausgeführt -->
+	<body>
+	
+		 <div class="row">
+	      <div class="large-12 columns">
+	        <h1>TETRIS - lab2</h1>
+	        <h3>VU Introduction to Computer Graphics / Christoph Murauer - 1127084</h3>
+	        <hr>
+	      </div>
+	    </div>
+	    
+		<div class="row">
+		
+			    <div class="row">
+		          	<div class="large-12 columns">
+		          		<a href="Start.html" class="button round">Back</a>
+		          	</div>
+	          	</div>
+			
+				<div class="panel">
+				<h4>News</h4>
+				<p><b>22. November:</b> Unfortunately, there are currently only 2 elements and the Collision Detection works only in the random rotation perfectly. Work in progress.</p>
+				</div>
+			
+	            <div class="panel">
+	              <h4>Controls</h4> 
+		              <ul>
+		              	<h5>------------Movement------------</h5>
+		              	<li>'\/' or '2'..........move in -Z direction</li>
+		              	<li>'/\' or '8'..........move in  Z direction</li>
+		              	<li>'<-' or '4'.........move in -X direction (left)</li>
+		              	<li>'->' or '6'.........move in X direction   (right)</li>
+		              	<li>'Space'..........release the object</li>
+		              	<li>'W'.................stop/start the gravity</li>
+		              	<h5>------------Rotation-------------</h5>
+		              	<li>'x'/'X'..............rotate counter-/clockwise around the X-axis</li>
+		              	<li>'y'/'Y'..............rotate counter-/clockwise around the Y-axis</li>
+		              	<li>'z'/'Z'..............rotate counter-/clockwise around the Z-axis</li>
+		              	<h5>---------------View---------------</h5>
+		              	<li>'Mouse'.........change cameraposition - left: translation / right: rotation 
+		              	<li>'P'.................switch between orthographic and perspective view</li>
+		              	<li>'G'.................toggle wireframe.</li>
+		              	<li>'R'.................hide the whole wireframe</li>
+		              	<li>'Q'.................restore the View/Lock the mouse</li>
+		              	<li>'S'.................zoom in/out</li>
+		              	<h5>--------------Debug--------------</h5>
+		              	<li>'I'...................print all informations about the current Object in the console(F12)</li>
+		              	<li>'U'.................print the globalGrid in the console(F12)</li>
+		              </ul>
+	            </div>
+	            
+	            
+	             <div class="panel">
+	             <h4>Readme</h4>
+	             <h5>ARBEITSABLAUF</h5>
+					<p>Als Lernunterlagen für WebGL habe ich vorwiegend folgende Quellen verwendet:
+					<b>-Buch:</b> WebGL Programming Guide / Kouichi Matsuda, Rodger Lea
+					<b>-Online:</b> http://learningwebgl.com/blog/?page_id=1217; https://developer.mozilla.org/de/docs/Web/JavaScript; http://webglfundamentals.org/webgl/lessons/webgl-fundamentals.html;
+					Weiters verwende ich das <b>CSS-Framework 'Foundation'</b> (http://foundation.zurb.com/) um die Seite etwas ansehnlicher zu gestalten.
+					Als Programmiersprachen werden Javascript, HTML und GLSL ES genutzt.</p>
+					
+					</br>
+					<h5>PROGRAMMSTRUKTUR</h5>
+					
+					<h7>SPIELFELD</h7></br>
+					<p><li><b>globalGrid:</b> Hierbei handelt es sich um die Matrix-repräsentation des Spielfelds im Hintergrund. Es wird verwendet um die Kollisionsabfrage zu handeln. Wird erstellt in <b>grid.js/resetGrid()</b>.
+					<li><b>drawGrid:</b> Dies ist die gezeichnete, visuelle Variante des Grids. Wird erstellt in <b>grid.js/createGrid()</b> sowie createToggleGrid() und gezeichnet in tetris.js/drawScene() </li></p>
+					
+					<h7>TETROMINOS</h7></br>
+					<p>Die Form, Farbe und der Objektgrid jedes Tetromino wird übersichtlichkeitshalber in einer eigenen Javascript Datei definiert (O.js, S.js,usw.). </br>
+					Zusätzlich wird in jeder Tetromino-Datei ein Objekt erstellt, mittels der Funktion <b>tetrominoConstructor()</b> (Tetris.js) und anschließend in das Array 
+					tetrominos[] gespeichert. Aufgerufen werden die Dateien einmalig in initBuffer() (Tetris.js). </br> Jedes Objekt hat seinen eigenen Namen, Farbwerte, blocks, sowie
+					individuelle positionen im golbalGrid sowie im drawGrid.
+					<b>Gelandete Elemente</b> werden im Array landedElems[] gespeichert und in drawScene() fortlaufend gezeichnet.</p>
+					
+					<h7>STEUERUNG</h7></br>
+					<p>Die Steuerung wird in <b>keyHandler.js</b>, mittels event-handling realisiert.</p></li>
+					
+					<h7>KOLLISIONSABFRAGE</h7></br>
+					<p>In <b>collisionDetection.js</b> wird im globalGrid auf Kollisionen kontrolliert. <b>checkSpawnPosition()</b> prüft die Startposition und liefert false zurück, wenn sie besetzt ist, was zum gameOver() führt. </br>
+					<b>checkGrid()</b> hingegen kontrolliert bei jeder Bewegung den globalGrid.
+					Ist ein Objekt gelandet, so wird die Funktion <b>drawInGrid()</b> aufgerufen, welche den ObjectGrid des Tetrominos in den globalGrid mit '1' speichert. </p>
+					
+					<h7>TETRIS.JS</h7></br>
+					<p>Hier sind alle essentiellen Funktionen implementiert, die für das aktuelle lauffähige Tetris Programm notwendig sind.
+					<li><b>tetrominoConstructor(name, items,posSize,colSize, blocks, colors, vertexIndices,
+    					objectGrid0, objectGrid90, objectGrid180, objectGrid270, startPointGrid, endPointGrid, topleft):</b> Erzeuge ein neues Tetromino Objekt. </li>
+    				<li><b>spawn(elem):</b> Überwacht, ob ein Element gelandet ist oder nicht. Nicht Gelandet: Zeichne das aktuelle Objekt; Gelandet: Kopiere das aktuelle Element und speichere in landedElems[]</li>
+    				<li><b>gravity():</b> Bewege das Objekt in konstanter Geschwindigkeit in -Y Richtung. Speichere gleichzeitig die aktuelle Y-Position des Objekts.</li>
+    				<li><b>transformationAnimation():</b> Animiere Roationen und Bewegungen.</li> 
+					<li><b>webGLStart():</b> Initialisiert WebGL, den Vertex- und den Fragmentshader, sowie die Buffer fuer die Eckpunkte und Farbwerte, behandelt Tastatureingaben und wiederholt das Programm</li>
+					<li><b>initGL(canvas):</b>  Initialisiere WebGL (Web Graphic Libary) und waehlt den Rendering Context WebGL fuer das Canvas Element aus.</li>
+					<li><b>getShader(gl, id):</b> Ruft den korrekten Shadertyp auf und liefert einen Grafikkarten kompatiblen Shader</li>
+					<li><b>initShaders():</b> Fuegt den Vertexshader (zustaendig fuer Berechnung der Eckpunkte des 3DModels) und den Fragmentshader (zustaendig fuer die Oberflaeche des Modells), zu einem WebGL 
+					Programm Objekt (ausfuerbar direkt auf der GraKa) zusammen. Jedes Programm besteht aus jeweils einem Vertex- sowie Fragment- oder Pixelshader.</li>
+					<li><b>setMatrixUniforms():</b>  Wandle die Matrizen von Javascript auf WebGL (Grafikkarten-seitig) um, damit die Sichtbarkeit fuer die Shaders garantiert ist.</li>
+					<li><b>degToRad(degrees):</b> Umrechnung vom Radiant- zum Grad Winkelmaß</li>
+					<li><b>mvPushMatrix():</b> Speichere die globale mvMatrix (ModelView-) auf einen Stack.</li>
+					<li><b>mvPopMatrix():</b> Lade die letzte Matrix vom Stack.</li>
+					<li><b>initBuffers():</b> Definiere die Objekte mithilfer ihrer Eckpunkte. Fuelle Grafikkarten Buffer mit informationen uber die gewuenschten Objekte.</li>
+					<li><b>drawScene():</b>  Zeichnet die Szene inklusive den Objekten und den drawGrid.</li>
+					<li><b>animate():</b> Fuehrt eine Animation aus, wenn der Zielwinkel noch nicht erreicht wurde.</li>
+					<li><b>tick():</b> Aktualisiert das Bild um eine Animation zu erschaffen.</li></p>
+
+					<h7>START.HTML</h7></br>
+					<p>Im Head werden alle Scripts aufgerufen, wobei sich der Code der beiden Shaderscripts (Vertex- und Fragmentshader) direkt in der HTML befindet. 
+					Außerdem ist hier natürlich der gesamte HTML Code zum Seitenaufbau enthalten und ruft beim Seitenaufruf sofort die Funktion <b>webGLStart()</b> (in Tetris.js) auf.</p>
+					
+					<h7>WEBGL-UTILS.JS</h7></br>
+					<p>Liefert das entsprechende unabhängige Refresh-Plugin für den Browser, damit sich dieser Grafik-Änderungen sofort wahrnimmt und darstellt.</p>
+					
+					<h7>GLMATRIX-0.9.5.MIN.JS</h7></br>
+					<p>Bibliothek die alle mathematischen Matrix operationen beinhaltet.</p>
+
+
+	             </div>
+	            
+	            
+	          <div class="row">
+	          	<div class="large-12 columns">
+	          		<a href="Start.html" class="button round">Back</a>
+	          	</div>
+	          </div>
+            
+       </div>
+	    
+	</body>
+</html>
+
+
+
+
+
+

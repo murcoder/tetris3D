@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	
+		<title>Tetris - lab2</title>
+		<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
+		<link rel="icon" href="img/favicon.ico" type="image/x-icon">
+		<link rel="stylesheet" href="css/foundation.css" />
+		<style type="text/css" media="screen">
+			canvas, img { display:block; margin:1em auto; } 
+			canvas { background:url(img/snow.jpg) }
+		</style>
+		<body oncontextmenu="return false;"> <!-- Deactivate the right-click-context menu -->
+		
+		<!--  Foundation  -->
+		<script src="js/vendor/modernizr.js"></script>
+		
+		<!--  WebGL   -->
+		<script type="text/javascript" src="src/glMatrix-0.9.5.min.js"></script>
+		<script type="text/javascript" src="src/webgl-utils.js"></script>
+		
+		<!--  Tetris  -->
+		<script type="text/javascript" src="src/tetris.js"></script>
+		<script type="text/javascript" src="src/O.js"></script> 
+		<script type="text/javascript" src="src/T.js"></script>
+		<script type="text/javascript" src="src/I.js"></script>
+		<script type="text/javascript" src="src/L.js"></script>
+		<script type="text/javascript" src="src/S.js"></script>
+		<script type="text/javascript" src="src/grid.js"></script>
+		<script type="text/javascript" src="src/keyHandler.js"></script>
+		<script type="text/javascript" src="src/collisionDetection.js"></script>
+		
+		<!-- Matrix Operations -->
+		<script type="text/javascript" src="src/matrixOperations.js"></script>
+				
+		<!--  Fragmentshader - oder Pixelshader - gibt die Farbe aller Pixel zwischen den Eckpunkten zurueck
+			 (mithilfe der variablen FragColor)-->
+		<script id="shader-fs" type="x-shader/x-fragment">
+  			precision mediump float;
+
+  			varying vec4 vColor;
+			varying vec3 vLightWeighting;
+
+  			void main(void) {
+    			gl_FragColor = vColor;
+  			}	
+		</script>	
+		
+		
+		
+		<!--Interpoliert
+			gl_Position: Finale Position des Eckpunktes = Projektionsmatrix * Model-Viewmatrix * eckpunkte
+			Attribute: sind Werte die auf einzelne Knoten angewendet werden (nur Vertex; z.b. jeder Eckpunkt eigene Farbe)
+			Uniform: Wird an beide Shader (vertex,Fragment) gesendet und ist für alle Vertex gleich (z.b. Lichtposition) 
+			Varyings: Wird im Vertex Shader deklariert und soll auch mit dem Fragmentshader geteilt werden koennen (lichtberechnungen)	-->
+		<script id="shader-vs" type="x-shader/x-vertex">
+    		attribute vec3 aVertexPosition;
+    		attribute vec4 aVertexColor;
+			attribute vec3 aVertexNormal;
+
+    		uniform mat4 uMVMatrix;
+    		uniform mat4 uPMatrix;
+			uniform mat3 uNMatrix;
+
+		
+			uniform vec3 uAmbientColor;
+  			uniform vec3 uLightingDirection;
+  			uniform vec3 uDirectionalColor;
+  			uniform bool uUseLighting;
+
+    		varying vec4 vColor;
+			varying vec3 vLightWeighting;
+
+    		void main(void) {
+        		gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0) ;
+        		vColor = aVertexColor;
+
+			if (!uUseLighting) {
+      			vLightWeighting = vec3(1.0, 1.0, 1.0);
+			    } else {
+      				vec3 transformedNormal = uNMatrix * aVertexNormal;
+      				float directionalLightWeighting = max(dot(transformedNormal, uLightingDirection), 0.0);
+      				vLightWeighting = uAmbientColor + uDirectionalColor * directionalLightWeighting;
+    			}
+    		}
+		</script>
+		
+	
+	</head>
+
+
+
+
+	<!--  Bei Seitenaufruf wird sofort die Funktion WebGL ausgeführt -->
+	<body onload="webGLStart();">
+
+	    
+	  <div class="row">
+      	<div class="large-12 medium-12 columns">
+        	<h1>TETRIS - lab2</h1>
+	        <h3>VU Introduction to Computer Graphics / Christoph Murauer - 1127084</h3>
+	        <hr>
+	    </div>
+	     
+
+	     
+          <div class="large-4 medium-4 small-4 columns">
+            <div class="callout panel">
+              <h5>Game</h5>
+              <a id=start onclick="turnGravOn()" class="button round tiny success">Start</a>
+              <a onclick="restart()" class="button round tiny alert">Restart</a>
+              <a href="Manual.html" class="button round tiny info">Manual</a>
+            </div>
+          </div>
+          
+          
+          <div class="large-4 medium-4 small-4 columns">
+            <div class="callout panel">
+            <h5>Grid</h5>
+              <a onclick="gridBigger()" class="button round tiny info ">Bigger</a>
+              <a onclick="gridSmaller()" class="button round tiny info">Smaller</a>
+              <a onclick="defaultGrid()" class="button round tiny info">Resize</a>
+              <a onclick="set2dView()" class="button round tiny info">2D/3D</a>
+              <a onclick="reset()" class="button round tiny info">Reset</a>
+            </div>
+          </div>
+          
+          <div class="large-4 medium-4 small-4 columns">
+            <div class="callout panel">
+              	<h5>Score</h5>
+		        <label for="score"></label> 
+	            <input id="score" name="score" disabled>
+            </div>
+          </div>
+            
+        <div class="large-12 medium-12 columns">
+        	<input id="messages" name="messages" disabled>
+        </div>  
+            
+            
+            
+          <div class="large-12 medium-12 columns">
+            <div class="callout panel">
+              <canvas id="canvas" style="border: none;" width="500" height="500">
+		      Please use a browser which is supporting "canvas"
+		    </canvas>
+            </div>
+          </div>
+        
+        
+       <!--  <div class="large-12 medium-12 columns">
+        	<a onclick="setWallpaper()" id="spring" class="button round tiny info">Spring</a>
+        	<a onclick="setWallpaper()" id="sommer" class="button round tiny info">Sommer</a>
+        	<a onclick="setWallpaper()" id="autumn" class="button round tiny info">Autumn</a>
+        	<a onclick="setWallpaper()" id="winter" class="button round tiny info">Winter</a>
+        </div>
+        -->
+	   </div>
+	</body>
+</html>
+
+
+
+
+
+
