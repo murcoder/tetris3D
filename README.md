@@ -1,8 +1,10 @@
 # Tetris 3D
 Created as part of a lecture for University of Vienna. 
 
-![screenshot](screenshot/screenshot_new.jpg)
+## Quickstart
+Download files and open __Start.html__.
 
+![screenshot](screenshot/screenshot_new.jpg)
 
 ## Controls
 ### Movement
