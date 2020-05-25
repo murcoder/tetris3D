@@ -1,7 +1,7 @@
-# Tetris 3D (Prototyp)
+# Tetris 3D
 Created as part of a lecture for University of Vienna. 
 
-![screenshot](screenshot/screenshot.jpg)
+![screenshot](screenshot/screenshot_new.jpg)
 
 
 ## Controls
