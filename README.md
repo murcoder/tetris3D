@@ -1,5 +1,5 @@
-# 3D Tetris Prototyp
-Created for University of Vienna 
+# Tetris 3D (Prototyp)
+Created as part of a lecture for University of Vienna. 
 
 ![screenshot](screenshot/screenshot.jpg)
 
